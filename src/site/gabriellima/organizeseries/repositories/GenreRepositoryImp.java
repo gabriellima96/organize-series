@@ -3,28 +3,27 @@ package site.gabriellima.organizeseries.repositories;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import site.gabriellima.organizeseries.configs.Database;
-import site.gabriellima.organizeseries.entities.User;
+import site.gabriellima.organizeseries.entities.Genre;
 import site.gabriellima.organizeseries.exceptions.PersistException;
 
-public class UserRepositoryImp implements UserRepository {
+public class GenreRepositoryImp implements GenreRepository {
 
 	private Database db = Database.getInstance();
 
 	@Override
-	public Boolean save(User obj) throws PersistException {
+	public Boolean save(Genre obj) throws PersistException {
 		boolean result = false;
 
 		try {
 			Connection con = db.getConnection();
 
-			String sql = "INSERT INTO user (name, email, password) VALUES (?, ?, ?)";
+			String sql = "INSERT INTO genre (name) VALUES (?)";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setString(1, obj.getName());
-			stm.setString(2, obj.getEmail());
-			stm.setString(3, obj.getPassword());
 
 			result = stm.execute();
 
@@ -35,10 +34,12 @@ public class UserRepositoryImp implements UserRepository {
 		} catch (Exception e) {
 			throw new PersistException(e.getMessage(), e);
 		}
+
 	}
 
 	@Override
-	public User update(User obj) throws PersistException {
+	public Genre update(Genre obj) throws PersistException {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -48,7 +49,7 @@ public class UserRepositoryImp implements UserRepository {
 		try {
 			Connection con = db.getConnection();
 
-			String sql = "DELETE FROM user WHERE id = ?";
+			String sql = "DELETE FROM genre WHERE id = ?";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, id);
 
@@ -64,55 +65,75 @@ public class UserRepositoryImp implements UserRepository {
 	}
 
 	@Override
-	public List<User> findAll() throws PersistException {
-		return null;
-	}
+	public List<Genre> findAll() throws PersistException {
+		List<Genre> genres = new ArrayList<>();
 
-	@Override
-	public User findById(Integer id) throws PersistException {
 		try {
 			Connection con = db.getConnection();
 
-			String sql = "SELECT * FROM user WHERE id = ?";
+			String sql = "SELECT * FROM genre";
 			PreparedStatement stm = con.prepareStatement(sql);
-			stm.setInt(1, id);
 			ResultSet rs = stm.executeQuery();
 
-			User user = null;
 			while (rs.next()) {
-				user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"), rs.getString("password"));
+				genres.add(new Genre(rs.getInt("id"), rs.getString("name")));
 			}
 
 			rs.close();
 			stm.close();
 			con.close();
 
-			return user;
+			return genres;
 		} catch (Exception e) {
 			throw new PersistException(e.getMessage(), e);
 		}
 	}
 
 	@Override
-	public User findOneByEmail(String email) throws PersistException {
+	public Genre findById(Integer id) throws PersistException {
 		try {
 			Connection con = db.getConnection();
 
-			String sql = "SELECT * FROM user WHERE email = ?";
+			String sql = "SELECT * FROM genre WHERE id = ?";
 			PreparedStatement stm = con.prepareStatement(sql);
-			stm.setString(1, email);
+			stm.setInt(1, id);
 			ResultSet rs = stm.executeQuery();
 
-			User user = null;
+			Genre genre = null;
 			while (rs.next()) {
-				user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"), rs.getString("password"));
+				genre = new Genre(rs.getInt("id"), rs.getString("name"));
 			}
 
 			rs.close();
 			stm.close();
 			con.close();
 
-			return user;
+			return genre;
+		} catch (Exception e) {
+			throw new PersistException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public Genre findOneByName(String name) throws PersistException {
+		try {
+			Connection con = db.getConnection();
+
+			String sql = "SELECT * FROM genre WHERE name = ?";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setString(1, name);
+			ResultSet rs = stm.executeQuery();
+
+			Genre genre = null;
+			while (rs.next()) {
+				genre = new Genre(rs.getInt("id"), rs.getString("name"));
+			}
+
+			rs.close();
+			stm.close();
+			con.close();
+
+			return genre;
 		} catch (Exception e) {
 			throw new PersistException(e.getMessage(), e);
 		}

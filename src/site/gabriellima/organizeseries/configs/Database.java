@@ -1,4 +1,4 @@
-package site.gabriellima.organizeseries.config;
+package site.gabriellima.organizeseries.configs;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,7 +8,7 @@ public class Database {
 
 	private static final String DATABASE_DRIVE = "com.mysql.jdbc.Driver";
 	private static final String DATABASE_NAME = "organizer";
-	private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/"+ DATABASE_NAME+ "?useSSL=false";
+	private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/" + DATABASE_NAME + "?useSSL=false";
 	private static final String DATABASE_USERNAME = "gabriellima";
 	private static final String DATABASE_PASSWORD = "";
 

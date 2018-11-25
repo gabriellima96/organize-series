@@ -1,6 +1,7 @@
 package site.gabriellima.organizeseries.repositories;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.List;
 
 import com.mysql.jdbc.PreparedStatement;
@@ -28,11 +29,11 @@ public class UserRepositoryImp implements UserRepository {
 
 			result = stm.execute();
 
+			stm.close();
 			con.close();
 
 			return result;
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new PersistException(e.getMessage(), e);
 		}
 	}
@@ -55,6 +56,30 @@ public class UserRepositoryImp implements UserRepository {
 	@Override
 	public User findById(Integer id) throws PersistException {
 		return null;
+	}
+
+	@Override
+	public User findOneByEmail(String email) throws PersistException {
+		try {
+			Connection con = db.getConnection();
+
+			String sql = "SELECT * FROM user WHERE email = '"+ email+ "'";
+			PreparedStatement stm = (PreparedStatement) con.prepareStatement(sql);
+			ResultSet rs = stm.executeQuery();
+
+			User user = null;
+			while (rs.next()) {
+				user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"), rs.getString("password"));
+			}
+
+			rs.close();
+			stm.close();
+			con.close();
+
+			return user;
+		} catch (Exception e) {
+			throw new PersistException(e.getMessage(), e);
+		}
 	}
 
 }

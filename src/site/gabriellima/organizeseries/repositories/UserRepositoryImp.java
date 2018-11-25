@@ -44,8 +44,24 @@ public class UserRepositoryImp implements UserRepository {
 	}
 
 	@Override
-	public User remove(Integer id) throws PersistException {
-		return null;
+	public Boolean remove(Integer id) throws PersistException {
+		boolean result = false;
+		try {
+			Connection con = db.getConnection();
+
+			String sql = "DELETE FROM user WHERE id = ?";
+			PreparedStatement stm = (PreparedStatement) con.prepareStatement(sql);
+			stm.setInt(1, id);
+			
+			result = stm.executeUpdate() == 1 ? true : false;
+			
+			stm.close();
+			con.close();
+
+			return result;
+		} catch (Exception e) {
+			throw new PersistException(e.getMessage(), e);
+		}
 	}
 
 	@Override
@@ -55,7 +71,27 @@ public class UserRepositoryImp implements UserRepository {
 
 	@Override
 	public User findById(Integer id) throws PersistException {
-		return null;
+		try {
+			Connection con = db.getConnection();
+
+			String sql = "SELECT * FROM user WHERE id = ?";
+			PreparedStatement stm = (PreparedStatement) con.prepareStatement(sql);
+			stm.setInt(1, id);
+			ResultSet rs = stm.executeQuery();
+
+			User user = null;
+			while (rs.next()) {
+				user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"), rs.getString("password"));
+			}
+
+			rs.close();
+			stm.close();
+			con.close();
+
+			return user;
+		} catch (Exception e) {
+			throw new PersistException(e.getMessage(), e);
+		}
 	}
 
 	@Override
@@ -63,8 +99,9 @@ public class UserRepositoryImp implements UserRepository {
 		try {
 			Connection con = db.getConnection();
 
-			String sql = "SELECT * FROM user WHERE email = '"+ email+ "'";
+			String sql = "SELECT * FROM user WHERE email = ?";
 			PreparedStatement stm = (PreparedStatement) con.prepareStatement(sql);
+			stm.setString(1, email);
 			ResultSet rs = stm.executeQuery();
 
 			User user = null;

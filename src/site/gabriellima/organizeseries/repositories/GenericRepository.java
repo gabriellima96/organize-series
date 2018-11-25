@@ -10,7 +10,7 @@ public interface GenericRepository<Type, Id> {
 
 	public Type update(Type obj) throws PersistException;
 
-	public Type remove(Id id) throws PersistException;
+	public Boolean remove(Id id) throws PersistException;
 
 	public List<Type> findAll() throws PersistException;
 

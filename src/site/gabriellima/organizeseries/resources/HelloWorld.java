@@ -1,4 +1,4 @@
-package site.gabriellima.organizerread.resources;
+package site.gabriellima.organizeseries.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

@@ -14,9 +14,7 @@ import javax.ws.rs.core.Response;
 import site.gabriellima.organizeseries.entities.Credentials;
 import site.gabriellima.organizeseries.entities.ResponseError;
 import site.gabriellima.organizeseries.entities.User;
-import site.gabriellima.organizeseries.entities.dto.UserTokenDTO;
 import site.gabriellima.organizeseries.repositories.UserRepositoryImp;
-import site.gabriellima.organizeseries.util.Token;
 import site.gabriellima.organizeseries.validations.UserValidation;
 
 @Path("/users")
@@ -73,10 +71,10 @@ public class UserResource {
 			User user = userRepository.findOneByEmail(credentials.getEmail());
 
 			if (user != null && user.getPassword().equals(credentials.getPassword())) {
-				return Response.ok().entity(new UserTokenDTO(user, Token.generateToken(user))).build();
+				return Response.ok().entity(user).build();
 			} else {
 				return Response.status(401)
-						.entity(new ResponseError("Erro ao tentar entrar", "O email / senha são inválidos")).build();
+						.entity(new ResponseError("Erro ao tentar entrar", "O email ou/e senha são inválidos")).build();
 			}
 		} catch (Exception e) {
 			return Response.status(500).entity(new ResponseError("Error interno", e.getMessage())).build();

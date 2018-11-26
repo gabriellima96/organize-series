@@ -1,9 +1,9 @@
 package site.gabriellima.organizeseries.entities.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import site.gabriellima.organizeseries.entities.Genre;
 
@@ -15,7 +15,7 @@ public class SeriesDTO implements Serializable {
 	private String description;
 	private Date releaseDate;
 	
-	private List<Genre> genres = new ArrayList<>();
+	private Set<Genre> genres = new HashSet<>();
 	
 	public SeriesDTO() {
 		
@@ -60,11 +60,11 @@ public class SeriesDTO implements Serializable {
 		this.releaseDate = releaseDate;
 	}
 
-	public List<Genre> getGenres() {
+	public Set<Genre> getGenres() {
 		return genres;
 	}
 
-	public void setGenres(List<Genre> genres) {
+	public void setGenres(Set<Genre> genres) {
 		this.genres = genres;
 	}
 

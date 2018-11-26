@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import site.gabriellima.organizeseries.configs.Database;
 import site.gabriellima.organizeseries.entities.Genre;
@@ -133,6 +135,32 @@ public class GenreRepositoryImp implements GenreRepository {
 			con.close();
 
 			return genre;
+		} catch (Exception e) {
+			throw new PersistException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public Set<Genre> findAllBySerie_id(Integer id) throws PersistException {
+		Set<Genre> genres = new HashSet<>();
+
+		try {
+			Connection con = db.getConnection();
+
+			String sql = "SELECT genre.id, genre.name FROM genre INNER JOIN series_genre ON series_genre.genre_id = genre.id WHERE series_genre.series_id = ?";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, id);
+			ResultSet rs = stm.executeQuery();
+
+			while (rs.next()) {
+				genres.add(new Genre(rs.getInt("genre.id"), rs.getString("genre.name")));
+			}
+
+			rs.close();
+			stm.close();
+			con.close();
+
+			return genres;
 		} catch (Exception e) {
 			throw new PersistException(e.getMessage(), e);
 		}

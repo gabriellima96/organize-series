@@ -1,9 +1,9 @@
 package site.gabriellima.organizeseries.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Series implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -14,7 +14,7 @@ public class Series implements Serializable {
 	private String description;
 	private Date releaseDate;
 
-	private List<Genre> genres = new ArrayList<>();
+	private Set<Genre> genres = new HashSet<>();
 
 	public Series() {
 
@@ -76,11 +76,11 @@ public class Series implements Serializable {
 		this.releaseDate = releaseDate;
 	}
 
-	public List<Genre> getGenres() {
+	public Set<Genre> getGenres() {
 		return genres;
 	}
 
-	public void setGenres(List<Genre> genres) {
+	public void setGenres(Set<Genre> genres) {
 		this.genres = genres;
 	}
 

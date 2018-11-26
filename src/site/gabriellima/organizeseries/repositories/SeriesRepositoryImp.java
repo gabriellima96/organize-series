@@ -6,8 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import site.gabriellima.organizeseries.configs.Database;
+import site.gabriellima.organizeseries.entities.Genre;
 import site.gabriellima.organizeseries.entities.Series;
 import site.gabriellima.organizeseries.entities.dto.SeriesDTO;
 import site.gabriellima.organizeseries.exceptions.PersistException;
@@ -15,6 +17,7 @@ import site.gabriellima.organizeseries.exceptions.PersistException;
 public class SeriesRepositoryImp implements SeriesRepository {
 
 	private Database db = Database.getInstance();
+	private GenreRepositoryImp genreRepository = new GenreRepositoryImp();
 
 	@Override
 	public Boolean save(Series obj) throws PersistException {
@@ -58,7 +61,16 @@ public class SeriesRepositoryImp implements SeriesRepository {
 			stm.setInt(5, obj.getUser().getId());
 
 			result = stm.execute();
+			
+			sql = "DELETE FROM series_genre WHERE series_id = "+ obj.getId();
+			stm = con.prepareStatement(sql);
+			result = stm.execute();
+			
+			sql = series_genres(obj.getGenres(), obj.getId());
 
+			stm = con.prepareStatement(sql);
+			result = stm.execute();
+			
 			stm.close();
 			con.close();
 
@@ -89,6 +101,8 @@ public class SeriesRepositoryImp implements SeriesRepository {
 			while (rs.next()) {
 				SeriesDTO seriesObj = new SeriesDTO(rs.getInt("series.id"), rs.getString("series.name"),
 						rs.getString("series.description"), rs.getDate("series.releaseDate"));
+				Set<Genre> genres = genreRepository.findAllBySerie_id(seriesObj.getId());
+				seriesObj.setGenres(genres);
 				series.add(seriesObj);
 			}
 
@@ -127,6 +141,8 @@ public class SeriesRepositoryImp implements SeriesRepository {
 			while (rs.next()) {
 				series = new SeriesDTO(rs.getInt("id"), rs.getString("name"), rs.getString("description"),
 						rs.getDate("releaseDate"));
+				Set<Genre> genres = genreRepository.findAllBySerie_id(series.getId());
+				series.setGenres(genres);
 			}
 
 			rs.close();
@@ -159,6 +175,16 @@ public class SeriesRepositoryImp implements SeriesRepository {
 		} catch (Exception e) {
 			throw new PersistException(e.getMessage(), e);
 		}
+	}
+
+	public String series_genres(Set<Genre> genres, Integer seriesId) {
+		String sql = "INSERT INTO series_genre (genre_id, series_id) values ";
+		for (Genre genre : genres) {
+			sql += "(" + genre.getId() + "," + seriesId + "),";
+		}
+		
+		sql = sql.substring(0, sql.length() - 1);
+		return sql;
 	}
 
 }

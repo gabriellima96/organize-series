@@ -8,7 +8,7 @@ public interface GenericRepository<Type, Id> {
 
 	public Boolean save(Type obj) throws PersistException;
 
-	public Type update(Type obj) throws PersistException;
+	public Boolean update(Type obj) throws PersistException;
 
 	public Boolean remove(Id id) throws PersistException;
 

@@ -38,8 +38,7 @@ public class GenreRepositoryImp implements GenreRepository {
 	}
 
 	@Override
-	public Genre update(Genre obj) throws PersistException {
-		// TODO Auto-generated method stub
+	public Boolean update(Genre obj) throws PersistException {
 		return null;
 	}
 

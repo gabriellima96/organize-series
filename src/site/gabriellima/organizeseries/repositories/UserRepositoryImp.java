@@ -38,7 +38,7 @@ public class UserRepositoryImp implements UserRepository {
 	}
 
 	@Override
-	public User update(User obj) throws PersistException {
+	public Boolean update(User obj) throws PersistException {
 		return null;
 	}
 

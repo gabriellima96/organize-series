@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import site.gabriellima.api.exception.DAOException;
 import site.gabriellima.api.exception.enums.ErroCodigo;
@@ -168,5 +170,35 @@ public class GeneroDAO implements GeneroRepository {
         }
          
         return true;
+	}
+
+	@Override
+	public Set<Genero> findAllBySerie_id(Integer serieId) {
+		Set<Genero> generos = new HashSet<>();
+
+		try {
+			Connection con = db.getConnection();
+
+			String sql = "SELECT genero.id, genero.nome FROM genero "
+					+ "INNER JOIN serie_generos "
+					+ "ON genero.id = serie_generos.genero_id "
+					+ "WHERE serie_generos.serie_id = ?";
+			
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, serieId);
+			ResultSet rs = stm.executeQuery();
+
+			while (rs.next()) {
+				generos.add(new Genero(rs.getInt("genero.id"), rs.getString("genero.nome")));
+			}
+
+			rs.close();
+			stm.close();
+			con.close();
+
+			return generos;
+		} catch (Exception ex) {
+			throw new DAOException("Erro ao recuperar todos os gêneros da serie no banco: " + ex.getMessage(), ErroCodigo.SERVER_ERROR.getCodigo());
+		}
 	}
 }

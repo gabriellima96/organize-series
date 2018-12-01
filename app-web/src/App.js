@@ -1,9 +1,6 @@
-import React, { Component } from 'react'
+import React from "react";
+import Routes from "./routes";
 
-class App extends Component {
-  render () {
-    return <button className='btn'>Hello World</button>
-  }
-}
+const App = () => <Routes />;
 
-export default App
+export default App;

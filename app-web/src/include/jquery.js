@@ -1,3 +1,3 @@
-import JQuery from 'jquery'
+import JQuery from "jquery";
 
-window.JQuery = window.$ = JQuery.$
+window.JQuery = window.$ = JQuery;

@@ -53,6 +53,11 @@ public class SerieDAO implements SerieRepository {
             throw new DAOException("Serie com dados incompletos.", ErroCodigo.BAD_REQUEST.getCodigo());
         }
 		
+		if (!obj.getGeneros().isEmpty()) {
+			generoDAO.removeAllBySerie_id(obj.getId());
+			generoDAO.saveAllBySerie_id(obj.getId(), obj.getGeneros());
+		}
+		
 		Boolean resultado = false;
 		try {
 			Connection con = db.getConnection();

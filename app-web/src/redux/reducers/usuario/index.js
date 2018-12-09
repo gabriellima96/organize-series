@@ -2,12 +2,12 @@ import createReducer from '../create-reducer'
 import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from './actions'
 
 const initialState = {
-  id: '',
+  id: 0,
   nome: '',
   email: '',
   senha: '',
   erro: {
-    codigo: '',
+    codigo: 0,
     mensagem: ''
   },
   isLoading: false

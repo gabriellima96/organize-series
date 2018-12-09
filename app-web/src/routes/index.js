@@ -1,10 +1,13 @@
 import React from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import SignIn from './pages/SignIn'
-import SignUp from './pages/SignUp'
-import Dashboard from './pages/dashboard'
-import CreateSeries from './pages/createSerie'
-import Generos from './pages/Generos'
+import { Route, Switch } from 'react-router-dom'
+import { ConnectedRouter } from 'connected-react-router'
+import SignIn from '../pages/SignIn'
+import SignUp from '../pages/SignUp'
+import Dashboard from '../pages/dashboard'
+import CreateSeries from '../pages/createSerie'
+import Generos from '../pages/Generos'
+
+import history from './history'
 
 // import { isAuthenticated } from "./services/auth";
 
@@ -22,7 +25,7 @@ import Generos from './pages/Generos'
 ); */
 
 const Routes = () => (
-  <BrowserRouter>
+  <ConnectedRouter history={history}>
     <Switch>
       <Route exact path="/" component={SignIn} />
       <Route path="/signup" component={SignUp} />
@@ -31,7 +34,7 @@ const Routes = () => (
       <Route path="/series/create" component={CreateSeries} />
       <Route path="*" component={() => <h1>Page not found</h1>} />
     </Switch>
-  </BrowserRouter>
+  </ConnectedRouter>
 )
 
 export default Routes

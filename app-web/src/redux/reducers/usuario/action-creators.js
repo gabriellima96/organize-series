@@ -1,3 +1,4 @@
+import { push } from 'connected-react-router'
 import { auth } from '../../../services/usuario-service'
 import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from './actions'
 
@@ -20,7 +21,7 @@ export const login = (email, senha) => async (dispatch, getState) => {
         payload: { user: response.data }
       })
 
-      console.log(getState)
+      dispatch(push('/dashboard'))
     } catch (e) {
       if (e.response) {
         dispatch({

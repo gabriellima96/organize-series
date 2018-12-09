@@ -1,8 +1,11 @@
 import { createStore, applyMiddleware, compose } from 'redux'
+import { routerMiddleware } from 'connected-react-router'
 import thunk from 'redux-thunk'
 import reducers from '../reducers'
 
-const middlewares = [thunk]
+import history from '../../routes/history'
+
+const middlewares = [thunk, routerMiddleware(history)]
 
 export default ({ initialState } = {}) => {
   const enhancer = compose(
@@ -10,7 +13,7 @@ export default ({ initialState } = {}) => {
     logger()
   )
 
-  const store = createStore(reducers, initialState, enhancer)
+  const store = createStore(reducers(history), initialState, enhancer)
 
   return store
 }

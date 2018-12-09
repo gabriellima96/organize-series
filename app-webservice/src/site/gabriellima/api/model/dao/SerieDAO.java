@@ -199,7 +199,6 @@ public class SerieDAO implements SerieRepository {
 		} catch (Exception ex) {
 			throw new DAOException("Erro ao recuperar todos as series do usuário no banco: " + ex.getMessage(), ErroCodigo.SERVER_ERROR.getCodigo());
 		}
-
 	}
 
 }

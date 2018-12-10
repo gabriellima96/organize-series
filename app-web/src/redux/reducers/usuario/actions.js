@@ -1,3 +1,5 @@
-export const LOGIN_REQUEST = 'usuario:LOGIN_REQUEST'
+export const REQUEST = 'usuario:LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'usuario:LOGIN_SUCCESS'
-export const LOGIN_FAILURE = 'usuario:LOGIN_FAILURE'
+export const FAILURE = 'usuario:LOGIN_FAILURE'
+export const CREATE_USER_SUCCESS = 'usuario:CREATE_USER_REQUEST'
+export const CLEAN_ERRO = 'usuario:CLEAN_ERRO'

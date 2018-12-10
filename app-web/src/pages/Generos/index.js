@@ -1,41 +1,31 @@
-import React, { Fragment, Component } from "react";
-import NavBar from "../../components/NavBar";
-import ModalCreateGeneros from "../../components/ModalCreateGeneros";
-import DeleteGenero from "../../components/DeleteGenero";
-import EditarGenero from "../../components/EditarGenero";
-import { buscarTodos } from "../../services/genero-servico";
+import React, { Fragment, PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import NavBar from '../../components/NavBar'
+import ModalCreateGeneros from '../../components/ModalCreateGeneros'
+import EditarGenero from '../../components/EditarGenero'
+import {
+  findAllGenero,
+  createGenero,
+  deleteGenero,
+  editGenero
+} from '../../redux/reducers/genero/action-creators'
 
-class Generos extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      generos: [],
-      error: false,
-      alert: ""
-    };
+class Generos extends PureComponent {
+  async componentDidMount () {
+    await this.props.findAllGeneros()
   }
 
-  async componentDidMount() {
-    try {
-      const response = await buscarTodos();
+  render () {
+    const {
+      generos,
+      isLoading,
+      alert: { mensagem, erro },
+      handleSubmitCreate,
+      handleDeleteGenero,
+      handleEditGenero
+    } = this.props
 
-      this.setState({ generos: response.data });
-    } catch (error) {
-      const response = error.response;
-      if (response) {
-        this.setState({ error: true, alert: response.data.mensagem });
-      } else {
-        this.setState({
-          error: true,
-          alert: "Ocorreu um error inesperado ao buscar os gêneros"
-        });
-      }
-    }
-  }
-
-  render() {
-    const { error, alert, generos } = this.state;
     return (
       <Fragment>
         <NavBar active="generos" />
@@ -46,17 +36,25 @@ class Generos extends Component {
                 <h1 className="display-5">Gêneros</h1>
               </div>
               <div className="col-3">
-                <ModalCreateGeneros />
+                <ModalCreateGeneros
+                  handleSubmitCreate={handleSubmitCreate}
+                  isLoading={isLoading}
+                />
               </div>
-              {alert && (
+              {isLoading && (
+                <div className="col-5">
+                  <i className="fa fa-spinner fa-pulse" />
+                </div>
+              )}
+              {mensagem && (
                 <div className="col-5">
                   <div
                     className={`alert ${
-                      error ? "alert-danger" : "alert-success"
+                      erro ? 'alert-danger' : 'alert-success'
                     }`}
                     role="alert"
                   >
-                    {alert}
+                    {mensagem}
                   </div>
                 </div>
               )}
@@ -74,17 +72,29 @@ class Generos extends Component {
                 <tbody>
                   {generos.length > 0 ? (
                     generos.map(genero => (
-                      <tr>
+                      <tr key={genero.id}>
                         <th scope="row">{genero.id}</th>
                         <td>{genero.nome}</td>
                         <td>
-                          <EditarGenero genero={genero} />
-                          <DeleteGenero id={genero.id} />
+                          <EditarGenero
+                            {...genero}
+                            handleEditGenero={handleEditGenero(genero)}
+                            isLoading={isLoading}
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-outline-danger ml-2"
+                            onClick={handleDeleteGenero(genero.id)}
+                          >
+                            <i className="fa fa-trash" /> Deletar
+                          </button>
                         </td>
                       </tr>
                     ))
                   ) : (
-                    <p>Sem dados.</p>
+                    <tr>
+                      <td>Sem dados.</td>
+                    </tr>
                   )}
                 </tbody>
               </table>
@@ -92,8 +102,51 @@ class Generos extends Component {
           </div>
         </div>
       </Fragment>
-    );
+    )
   }
 }
 
-export default Generos;
+Generos.propTypes = {
+  alert: PropTypes.shape({
+    codigo: PropTypes.number,
+    mensagem: PropTypes.string.isRequired,
+    erro: PropTypes.bool.isRequired
+  }),
+  generos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      nome: PropTypes.string.isRequired
+    })
+  ),
+  isLoading: PropTypes.bool.isRequired,
+  findAllGeneros: PropTypes.func.isRequired,
+  handleSubmitCreate: PropTypes.func.isRequired,
+  handleDeleteGenero: PropTypes.func.isRequired,
+  handleEditGenero: PropTypes.func.isRequired
+}
+
+const mapStateToProps = state => state.genero
+
+const mapDispatchToProps = dispatch => ({
+  findAllGeneros: () => dispatch(findAllGenero()),
+  handleSubmitCreate: e => {
+    e.preventDefault()
+    dispatch(createGenero({ nome: e.target.nome.value }))
+    e.target.nome.value = ''
+    window.$('#modalCreateGenero').modal('hide')
+  },
+  handleDeleteGenero: id => e => {
+    e.preventDefault()
+    dispatch(deleteGenero(id))
+  },
+  handleEditGenero: genero => e => {
+    e.preventDefault()
+    dispatch(editGenero({ id: genero.id, nome: e.target.nomeEdit.value }))
+    window.$(`#${genero.nome}`).modal('hide')
+  }
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Generos)

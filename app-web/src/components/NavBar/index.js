@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 class NavBar extends Component {
-  render() {
-    const { active } = this.props;
+  render () {
+    const { active } = this.props
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <Link to="/" className="navbar-brand">
@@ -19,17 +19,17 @@ class NavBar extends Component {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav mr-auto">
-            <li className={`nav-item ${active === "home" ? "active" : ""}`}>
+            <li className={`nav-item ${active === 'home' ? 'active' : ''}`}>
               <Link to="/" className="nav-link">
                 Home
               </Link>
             </li>
-            <li className={`nav-item ${active === "series" ? "active" : ""}`}>
+            <li className={`nav-item ${active === 'series' ? 'active' : ''}`}>
               <Link to="/dashboard" className="nav-link">
                 Series
               </Link>
             </li>
-            <li className={`nav-item ${active === "generos" ? "active" : ""}`}>
+            <li className={`nav-item ${active === 'generos' ? 'active' : ''}`}>
               <Link to="/generos" className="nav-link">
                 Gêneros
               </Link>
@@ -37,8 +37,8 @@ class NavBar extends Component {
           </ul>
         </div>
       </nav>
-    );
+    )
   }
 }
 
-export default NavBar;
+export default NavBar

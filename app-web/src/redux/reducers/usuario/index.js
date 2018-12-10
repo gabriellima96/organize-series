@@ -1,5 +1,11 @@
 import createReducer from '../create-reducer'
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from './actions'
+import {
+  REQUEST,
+  LOGIN_SUCCESS,
+  FAILURE,
+  CREATE_USER_SUCCESS,
+  CLEAN_ERRO
+} from './actions'
 
 const initialState = {
   id: 0,
@@ -14,7 +20,7 @@ const initialState = {
 }
 
 const auth = createReducer(initialState, {
-  [LOGIN_REQUEST]: (state, action) => ({
+  [REQUEST]: (state, action) => ({
     ...state,
     isLoading: true
   }),
@@ -23,10 +29,18 @@ const auth = createReducer(initialState, {
     ...action.payload.user,
     isLoading: false
   }),
-  [LOGIN_FAILURE]: (state, action) => ({
+  [FAILURE]: (state, action) => ({
     ...state,
     erro: action.payload.erro,
     isLoading: false
+  }),
+  [CREATE_USER_SUCCESS]: (state, action) => ({
+    ...initialState,
+    erro: action.payload.erro
+  }),
+  [CLEAN_ERRO]: (state, action) => ({
+    ...state,
+    erro: { codigo: 0, mensagem: '' }
   })
 })
 

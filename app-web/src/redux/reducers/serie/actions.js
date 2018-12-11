@@ -1,0 +1,6 @@
+export const SERIE_REQUEST = 'serie:SERIE_REQUEST'
+export const SERIE_FAILURE = 'serie:LOGIN_FAILURE'
+export const SERIE_CLEAN_ERRO = 'serie:SERIE_CLEAN_ERRO'
+export const SERIE_LIST_SUCCESS = 'serie:SERIE_LIST_SUCCESS'
+export const SERIE_DELETE_SUCCESS = 'serie:SERIE_DELETE_SUCCESS'
+export const SERIE_EDIT_SUCCESS = 'serie:SERIE_EDIT_SUCCESS'

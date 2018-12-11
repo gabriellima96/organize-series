@@ -11,6 +11,8 @@ import {
   editGenero
 } from '../../redux/reducers/genero/action-creators'
 
+import './style.css'
+
 class Generos extends PureComponent {
   async componentDidMount () {
     await this.props.findAllGeneros()
@@ -29,7 +31,7 @@ class Generos extends PureComponent {
     return (
       <Fragment>
         <NavBar active="generos" />
-        <div className="jumbotron">
+        <div className="jumbotron max">
           <div className="container">
             <div className="row">
               <div className="col-2">

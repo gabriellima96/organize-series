@@ -1,23 +1,28 @@
-import api from "./api";
+import api from './api'
 
-const RESOURCE = "/series";
+const RESOURCE = '/series'
 
-export async function salvar(serie) {
-  return await api.post(RESOURCE, serie);
+export async function salvar (id, serie) {
+  const response = await api.post(`/${id}${RESOURCE}`, serie)
+  return response
 }
 
-export async function buscarTodos() {
-  return await api.get(RESOURCE);
+export async function buscarTodos (id) {
+  const response = await api.get(`/${id}${RESOURCE}`)
+  return response
 }
 
-export async function buscarPorId(id) {
-  return await api.get(`${RESOURCE}/${id}`);
+export async function buscarPorId (id, serieId) {
+  const response = await api.get(`/${id}${RESOURCE}/${serieId}`)
+  return response
 }
 
-export async function atualizar(serie) {
-  return await api.put(`${RESOURCE}/${id}`, serie);
+export async function atualizar (id, serie) {
+  const response = await api.put(`/${id}${RESOURCE}/${serie.id}`, serie)
+  return response
 }
 
-export async function remover(id) {
-  return await api.delete(`${RESOURCE}/${id}`);
+export async function remover (id, serieId) {
+  const response = await api.delete(`/${id}${RESOURCE}/${serieId}`)
+  return response
 }
